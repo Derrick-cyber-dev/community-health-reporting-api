@@ -17,8 +17,8 @@ return new class extends Migration
             $table->integer('patient_count');
             $table->string('disease_reported');
             $table->string('location');
-            $table->enum('severity', ['low', 'medium','high'])->default('low');
             $table->date('report_date');
+            $table->enum('severity', ['low', 'medium','high'])->default('low');
             $table->timestamps();
         });
     }
