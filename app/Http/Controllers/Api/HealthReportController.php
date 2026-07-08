@@ -9,9 +9,26 @@ use Illuminate\Http\Request;
 class HealthReportController extends Controller
 {
     // GET ALL REPORTS
-    public function index()
+    public function index(Request $request)
     {
-        $reports = HealthReport::latest()->get();
+        $query = HealthReport::query();
+
+        // Filter by severity
+        if($request->has('severity')){
+            $query->where('severity', strtolower($request->severity));
+        }
+
+        // Filter by location
+        if($request->has('location')){
+            $query->where('location', 'like', '%' . $request->location . '%');
+        }
+
+        // Filter by disease
+        if($request->has('disease')){
+            $query->where('disease_reported', 'like', '%' . $request->disease . '%');
+        }
+
+        $reports = $query->latest()->get();
 
         return response()->json([
             'status' => 'success',
