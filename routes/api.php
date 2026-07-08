@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\HealthReportController;
 use Illuminate\Support\Facades\Route;
 use App\Models\HealthReport;
 
+
 Route::get('/reports', function () {
     return response()->json([
         'status' => 'success',
@@ -11,7 +12,7 @@ Route::get('/reports', function () {
     ]);
 });
 
-Route::post('/reports', [HealthReportController::class, 'store']);
 
+Route::apiResource('reports', HealthReportController::class);
 
 
