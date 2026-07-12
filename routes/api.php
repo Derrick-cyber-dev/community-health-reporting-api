@@ -1,18 +1,14 @@
 <?php
 
-use App\Http\Controllers\Api\HealthReportController;
 use Illuminate\Support\Facades\Route;
-use App\Models\HealthReport;
+use App\Http\Controllers\Api\HealthReportController;
+use App\Http\Controllers\Api\AuthController;
 
+// Public routes
+Route::post('/register', [AuthController::class, 'register']);
+Route::post('/login', [AuthController::class, 'login']);
 
-Route::get('/reports', function () {
-    return response()->json([
-        'status' => 'success',
-        'data' => HealthReport::where('severity', 'high')->get()
-    ]);
+// Protected routes
+Route::middleware('auth:sanctum')->group(function () {
+    Route::apiResource('reports', HealthReportController::class);
 });
-
-
-Route::apiResource('reports', HealthReportController::class);
-
-
