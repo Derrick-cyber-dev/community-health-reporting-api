@@ -12,6 +12,13 @@ class HealthReport extends Model
     'disease_reported',
     'location',
     'severity',
-     'report_date'
+     'report_date',
+     'user_id'
 ];
+
+public function user(){
+    return $this->belongsTo(User::class);
 }
+}
+
+

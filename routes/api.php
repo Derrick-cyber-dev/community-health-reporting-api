@@ -12,3 +12,9 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('reports', HealthReportController::class);
 });
+
+// Protected routes
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/reports', [HealthReportController::class, 'store']);
+    Route::get('/reports', [HealthReportController::class, 'index']);
+});
