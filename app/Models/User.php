@@ -48,8 +48,15 @@ class User extends Authenticatable
         ];
     }
 
+    /*
     public function reports(){
         return $this->hasMany(HealthReport::class);
     }
+    */
+
+    public function healthReports()
+{
+    return $this->hasMany(HealthReport::class);
+}
 
 }

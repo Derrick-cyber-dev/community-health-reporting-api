@@ -8,33 +8,22 @@ use Illuminate\Http\Request;
 
 class HealthReportController extends Controller
 {
-public function index()
+public function index(Request $request)
 {
-    return auth()->user()->healthReports;
+    $query = $request->user()->healthReports();
 
-    $query = $request->user()->reports(); //Only user's reports
-
-    // Filter by severity
+    // 🔍 Filter by severity
     if ($request->has('severity')) {
         $query->where('severity', strtolower($request->severity));
     }
 
-    // Filter by location
-    if ($request->has('location')) {
-        $query->where('location', 'like', '%' . $request->location . '%');
+    // 📅 Filter by date
+    if ($request->has('date')) {
+        $query->whereDate('report_date', $request->date);
     }
 
-    // Filter by disease
-    if ($request->has('disease')) {
-        $query->where('disease_reported', 'like', '%' . $request->disease . '%');
-    }
-
-    $reports = $query->latest()->get();
-
-    return response()->json([
-        'status' => 'success',
-        'data' => $reports
-    ]);
+    // 📊 Pagination (VERY IMPORTANT)
+    return $query->latest()->paginate(10);
 }
 
     // CREATE REPORT
@@ -52,9 +41,8 @@ public function index()
     // Normalize severity
     $validated['severity'] = strtolower(trim($validated['severity']));
 
-    // ✅ Attach logged-in user
-    $validated['user_id'] = auth()->id();
-
+    // Attach logged-in user
+    $validated['user_id'] = $request->user()->id;
     $report = HealthReport::create($validated);
 
     return response()->json([
